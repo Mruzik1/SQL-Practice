@@ -37,3 +37,60 @@ JOIN hr.employees m
         FROM hr.employees jr
         WHERE jr.first_name = 'John' AND jr.last_name = 'Russell'
     );
+
+-- Task 4:
+-- Write a query to calculate the total salary expense for each job title, ordered from highest to lowest expense.
+SELECT
+    j.job_id,
+    j.job_title,
+    SUM(e.salary) total_salary
+FROM hr.employees e
+JOIN hr.jobs j
+    ON j.job_id = e.job_id
+GROUP BY j.job_id, j.job_title
+ORDER BY SUM(e.salary) DESC;
+
+-- Task 5:
+-- Write a query to find the department with the highest average salary across all departments.
+-- Display the department name and the average salary.
+SELECT
+    d.department_name,
+    ROUND(AVG(e.salary)) avg_salary
+FROM hr.employees e
+JOIN hr.departments d
+    ON d.department_id = e.department_id
+GROUP BY d.department_name
+ORDER BY AVG(e.salary) DESC
+FETCH NEXT ROW ONLY;
+
+-- Task 6:
+-- Write a query to display the top 3 departments with the highest number of employees.
+-- Include the department name and the number of employees.
+SELECT
+    d.department_name,
+    COUNT(*) number_of_employees
+FROM hr.employees e
+JOIN hr.departments d
+    ON d.department_id = e.department_id
+GROUP BY d.department_name
+ORDER BY COUNT(*) DESC
+FETCH NEXT 3 ROWS ONLY;
+
+-- Task 7:
+-- Write a query to find the employees who joined the company in the year 2005 and have the
+-- highest salary in their department. Display their employee ID, name, and salary.
+
+
+-- Task 8:
+-- Write a query to calculate the average salary of employees who have been with the company
+-- for more than 10 years. Exclude employees with a job title of 'President'.
+
+
+-- Task 9:
+-- Write a query to find the departments where the average salary is higher than the average salary of
+-- the Sales department. Display the department name and the average salary.
+
+
+-- Task 10:
+-- Write a query to display the employee name and the number of employees who
+-- joined the company in the same year as that employee.
