@@ -79,12 +79,29 @@ FETCH NEXT 3 ROWS ONLY;
 -- Task 7:
 -- Write a query to find the employees who joined the company in the year 2005 and have the
 -- highest salary in their department. Display their employee ID, name, and salary.
-
+SELECT
+    e.employee_id,
+    e.first_name,
+    e.last_name,
+    e.department_id,
+	ce.max_salary
+FROM hr.employees e
+JOIN (SELECT
+        e1.department_id,
+        MAX(e1.salary) max_salary
+    FROM hr.employees e1
+    WHERE EXTRACT(YEAR FROM e1.hire_date) = 2005 AND e1.department_id IS NOT NULL
+    GROUP BY e1.department_id) ce
+ON ce.max_salary = e.salary AND e.department_id = ce.department_id;
 
 -- Task 8:
 -- Write a query to calculate the average salary of employees who have been with the company
--- for more than 10 years. Exclude employees with a job title of 'President'.
-
+-- for more than 20 years (considering todays date). Exclude employees with a job title of 'President'.
+SELECT
+    AVG(e.salary) average_salary
+FROM hr.employees e
+WHERE MONTHS_BETWEEN(SYSDATE, e.hire_date) >= 240 
+      AND e.job_id != 'AD_PRES';
 
 -- Task 9:
 -- Write a query to find the departments where the average salary is higher than the average salary of
