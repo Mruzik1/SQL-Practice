@@ -106,8 +106,29 @@ WHERE MONTHS_BETWEEN(SYSDATE, e.hire_date) >= 240
 -- Task 9:
 -- Write a query to find the departments where the average salary is higher than the average salary of
 -- the Sales department. Display the department name and the average salary.
+SELECT
+    d.department_name,
+    AVG(e.salary) average_salary
+FROM hr.departments d
+JOIN hr.employees e
+    ON e.department_id = d.department_id
+GROUP BY d.department_name
+HAVING AVG(e.salary) > (
+    SELECT AVG(e1.salary)
+    FROM hr.employees e1
+    WHERE e1.department_id = 80
+    GROUP BY e1.id
+);
 
 
 -- Task 10:
 -- Write a query to display the employee name and the number of employees who
 -- joined the company in the same year as that employee.
+SELECT
+    e_main.first_name,
+    e_main.last_name,
+    COUNT(*) AS same_join_year_count
+FROM hr.employees e_main
+JOIN hr.employees e
+    ON EXTRACT(YEAR FROM e_main.hire_date) = EXTRACT(YEAR FROM e.hire_date)
+GROUP BY e_main.first_name, e_main.last_name;
